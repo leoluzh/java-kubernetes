@@ -10,7 +10,7 @@ services:
       MYSQL_USER: ${MYSQL_USER:java}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:1234}
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
   phpmyadmin:
