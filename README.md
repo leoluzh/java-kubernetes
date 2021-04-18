@@ -47,6 +47,20 @@ http://localhost:8080/app/users
 
 http://localhost:8080/app/hello
 
+**Check App Status**
+
+http://localhost:8080/app/actuator
+
+http://localhost:8080/app/actuator/health/liveness
+
+http://localhost:8080/app/actuator/health/readiness
+
+http://localhost:8080/app/actuator/info
+
+http://localhost:8080/app/actuator/prometheus
+
+http://localhost:8080/app/actuator/metrics
+
 ## Part two - app on Docker:
 
 Create a Dockerfile:
