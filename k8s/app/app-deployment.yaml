@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp
-  namespace: dev-to
+  name: movieflixapp
+  namespace: lambdasys-movieflix
   labels:
-    app: myapp
+    app: movieflixapp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: myapp
+      app: movieflixapp
   template:
       metadata:
         labels:
-          app: myapp
+          app: movieflixapp
       spec:
         containers:
-          - name: myapp
+          - name: movieflixapp
             image: java-k8s:latest
             imagePullPolicy: Never
             ports:
@@ -24,15 +24,15 @@ spec:
                 name: http
             envFrom:
               - configMapRef:
-                  name: myapp
+                  name: movieflixapp
             livenessProbe:
               httpGet:
-                path: /app/actuator/health/liveness
+                path: /movieflix/actuator/health/liveness
                 port: 8080
               initialDelaySeconds: 30
             readinessProbe:
               httpGet:
-                path: /app/actuator/health/readiness
+                path: /movieflix/actuator/health/readiness
                 port: 8080
               initialDelaySeconds: 30
             resources:
