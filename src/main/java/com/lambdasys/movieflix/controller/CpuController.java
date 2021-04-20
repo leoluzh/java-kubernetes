@@ -1,4 +1,4 @@
-package com.lambdasys.java.kubernetes.controller;
+package com.lambdasys.movieflix.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/cpu")
+@RequestMapping("/api/v1/cpu")
 public class CpuController {
 
     @GetMapping
