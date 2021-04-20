@@ -1,13 +1,13 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: myapp
-  namespace: dev-to
+  name: movieflixapp
+  namespace: lambdasys-movieflix
 spec:
   scaleTargetRef:
     apiVersion: apps/v1beta1
     kind: Deployment
-    name: myapp
+    name: movieflixapp
   minReplicas: 1
   maxReplicas: 3
   metrics:
