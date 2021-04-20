@@ -1,10 +1,10 @@
 FROM openjdk:16-alpine
 
-RUN mkdir /usr/myapp
+RUN mkdir /usr/movieflixapp
 
-COPY target/java-kubernetes.jar /usr/myapp/app.jar
-WORKDIR /usr/myapp
+COPY target/movieflix-kubernetes.jar /usr/movieflixapp/app.jar
+WORKDIR /usr/movieflixapp
 
 EXPOSE 8080
 
-ENTRYPOINT [ "sh", "-c", "java --enable-preview $JAVA_OPTS -jar app.jar" ]
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -jar app.jar" ]
