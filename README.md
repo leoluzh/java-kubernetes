@@ -306,6 +306,17 @@ https://kubernetes.io/docs/home/
 
 https://minikube.sigs.k8s.io/docs/
 
+## Free Books
+
+__Microservices for Java Developers__
+* https://developers.redhat.com/books/microservices-java-developers-hands-introduction-frameworks-and-containers
+
+__Docker for Java Developers__
+* https://github.com/ffisk/books/blob/master/docker-for-java-developers.pdf
+
+__Getting Started With Cloud Native__
+* https://github.com/IBM/cloud-native-starter
+
 ## Useful commands
 
 ```
