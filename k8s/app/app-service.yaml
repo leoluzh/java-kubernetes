@@ -1,11 +1,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: myapp
-  namespace: dev-to
+  name: movieflixapp
+  namespace: lambdasys-movieflix
 spec:
   selector:
-    app: myapp
+    app: movieflixapp
   type: NodePort
   ports:
     - protocol: TCP
