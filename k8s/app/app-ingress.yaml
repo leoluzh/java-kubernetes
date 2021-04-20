@@ -5,7 +5,7 @@ metadata:
   namespace: lambdasys-movieflix
 spec:
   rules:
-    - host: dev.local
+    - host: movieflix.local
       http:
         paths:
           - path: /movieflix
