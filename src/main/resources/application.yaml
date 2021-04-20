@@ -16,7 +16,7 @@ spring:
     timeout-per-shutdown-phase: 30s
 info:
   app:
-    name: java-kubernetes-movieflix
+    name: movieflix-kubernetes
     description: Demo Kubernetes for Java Developer
 management:
   endpoint:
