@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://${DATABASE_SERVER_NAME:localhost}:3306/k8s_java
+    url: jdbc:postgres://${DATABASE_SERVER_NAME:localhost}:5432/movieflixdb
     username: ${DATABASE_USER_NAME:java}
     password: ${DATABASE_USER_PASSWORD:1234}
-    driverClassName: com.mysql.jdbc.Driver
+    driverClassName: org.postgresql.Driver
   jpa:
     show-sql: true
     hibernate:
@@ -11,13 +11,13 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL57Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   lifecycle:
     timeout-per-shutdown-phase: 30s
 info:
   app:
-    name: java-kubernetes
-    description: Demo Kubernetes for Java Developers
+    name: java-kubernetes-movieflix
+    description: Demo Kubernetes for Java Developer
 management:
   endpoint:
     metrics:
@@ -32,4 +32,8 @@ management:
 server:
   shutdown: graceful
   servlet:
-    context-path: /app
+    context-path: /movieflix
+
+
+#customize openapi/swagger default path
+springdoc.api-docs.path=/api-docs
