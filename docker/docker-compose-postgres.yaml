@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:13.2
+    container_name: postgres
+    environment:
+      MYSQL_DATABASE: movieflixdb
+      POSTGRES_USER: ${POSTGRES_USER:java}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:1234}
+      PGDATA: /data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    volumes:
+      - postgresdata:/data/postgres
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    links:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_ADMIN:-pgadmin4@pgamin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    volumes:
+      - pgadmindata:/root/.pgadmin
+    restart: always
+    ports:
+      - "${PGADMIN_PORT:-8081}:80"
+    networks:
+      - postgres
+    depends_on:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgresdata:
+  pgadmindata:
