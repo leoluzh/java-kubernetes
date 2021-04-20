@@ -1,0 +1,30 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: lambdasys-movieflix
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - image: postgres:13.2
+          name: postgres
+          env:
+            # Use secret in real usage
+            - name: POSTGRES_USER
+              value: movieflixapp
+            - name: POSTGRES_PASSWORD
+              value: movieflixapp_pwd
+            - name: POSTGRES_DBNAME
+              value: movieflixdb
+          ports:
+            - containerPort: 5432
+              name: postgres
