@@ -14,7 +14,8 @@ https://dev.to/sandrogiacom/kubernetes-for-java-developers-setup-41nk
 
 Help to install tools:
 
-https://github.com/sandrogiacom/k8s
+* https://minikube.sigs.k8s.io/docs/start/
+* https://kubernetes.io/docs/tasks/tools/
 
 ### Build and run application:
 
@@ -38,28 +39,28 @@ make run-db
 
 **Run application**
 ```bash
-java --enable-preview -jar target/java-kubernetes.jar
+java -jar target/movieflix-kubernetes.jar
 ```
 
 **Check**
 
-http://localhost:8080/app/users
+http://localhost:8080/movieflix/api/v1/movies
 
-http://localhost:8080/app/hello
+http://localhost:8080/movieflix/api/v1/hello
 
 **Check App Status**
 
-http://localhost:8080/app/actuator
+http://localhost:8080/movieflix/actuator
 
-http://localhost:8080/app/actuator/health/liveness
+http://localhost:8080/movieflix/actuator/health/liveness
 
-http://localhost:8080/app/actuator/health/readiness
+http://localhost:8080/movieflix/actuator/health/readiness
 
-http://localhost:8080/app/actuator/info
+http://localhost:8080/movieflix/actuator/info
 
-http://localhost:8080/app/actuator/prometheus
+http://localhost:8080/movieflix/actuator/prometheus
 
-http://localhost:8080/app/actuator/metrics
+http://localhost:8080/movieflix/actuator/metrics
 
 ## Part two - app on Docker:
 
@@ -67,11 +68,11 @@ Create a Dockerfile:
 
 ```yaml
 FROM openjdk:16-alpine
-RUN mkdir /usr/myapp
-COPY target/java-kubernetes.jar /usr/myapp/app.jar
-WORKDIR /usr/myapp
+RUN mkdir /usr/movieflixapp
+COPY target/movieflix-kubernetes.jar /usr/movieflixapp/app.jar
+WORKDIR /usr/movieflixapp
 EXPOSE 8080
-ENTRYPOINT [ "sh", "-c", "java --enable-preview $JAVA_OPTS -jar app.jar" ]
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -jar app.jar" ]
 ```
 
 **Build application and docker image**
@@ -92,14 +93,12 @@ make run-app
 
 **Check**
 
-http://localhost:8080/app/users
-
-http://localhost:8080/app/hello
+http://localhost:8080/movieflix/api/v1/hello
 
 Stop all:
 
 `
-docker stop mysql57 myapp
+docker stop postgres movieflixapp
 `
 
 ## Part three - app on Kubernetes:
@@ -113,45 +112,45 @@ Prepare
 `
 make k-setup
 `
- start minikube, enable ingress and create namespace dev-to
+ start minikube, enable ingress and create namespace lambdasys-movieflix
 
 ### Check IP
 
 `
-minikube -p dev.to ip
+minikube -p lambdasys.movieflix ip
 `
 
 ### Minikube dashboard
 
 `
-minikube -p dev.to dashboard
+minikube -p lambdasys.movieflix dashboard
 `
 
 ### Deploy database
 
-create mysql deployment and service
+create postgres deployment and service
 
 `
 make k-deploy-db
 `
 
 `
-kubectl get pods -n dev-to
+kubectl get pods -n lambdasys-movieflix
 `
 
 OR
 
 `
-watch k get pods -n dev-to
+watch k get pods -n lambdasys-movieflix
 `
 
 
 `
-kubectl logs -n dev-to -f <pod_name>
+kubectl logs -n lambdasys-movieflix -f <pod_name>
 `
 
 `
-kubectl port-forward -n dev-to <pod_name> 3306:3306
+kubectl port-forward -n lambdasys-movieflix <pod_name> 5432:5432
 `
 
 ## Build application and deploy
@@ -183,35 +182,35 @@ make k-deploy-app
 **Check**
 
 `
-kubectl get services -n dev-to
+kubectl get services -n lambdasys-movieflix
 `
 
 To access app:
 
 `
-minikube -p dev.to service -n dev-to myapp --url
+minikube -p lambdasys.movieflix service -n lambdasys-movieflix movieflixapp --url
 `
 
 Ex:
 
-http://172.17.0.3:32594/app/users
-http://172.17.0.3:32594/app/hello
+* http://172.17.0.3:32594/movieflix/api/v1/movies
+* http://172.17.0.3:32594/movieflix/api/v1/hello
 
 ## Check pods
 
 `
-kubectl get pods -n dev-to
+kubectl get pods -n lambdasys-movieflix
 `
 
 `
-kubectl -n dev-to logs myapp-6ccb69fcbc-rqkpx
+kubectl -n lambdasys-movieflix logs movieflixapp-6ccb69fcbc-rqkpx
 `
 
 ## Map to dev.local
 
 get minikube IP
 `
-minikube -p dev.to ip
+minikube -p lambdasys.movieflix ip
 ` 
 
 Edit `hosts` 
@@ -222,27 +221,27 @@ sudo vim /etc/hosts
 
 Replicas
 `
-kubectl get rs -n dev-to
+kubectl get rs -n lambdasys-movieflix
 `
 
 Get and Delete pod
 `
-kubectl get pods -n dev-to
+kubectl get pods -n lambdasys-movieflix
 `
 
 `
-kubectl delete pod -n dev-to myapp-f6774f497-82w4r
+kubectl delete pod -n lambdasys-movieflix movieflixapp-f6774f497-82w4r
 `
 
 Scale
 `
-kubectl -n dev-to scale deployment/myapp --replicas=2
+kubectl -n lambdasys-movieflix scale deployment/movieflixapp --replicas=2
 `
 
 Test replicas
 `
 while true
-do curl "http://dev.local/app/hello"
+do curl "http://dev.local/movieflix/hello"
 echo
 sleep 2
 done
@@ -251,28 +250,18 @@ Test replicas with wait
 
 `
 while true
-do curl "http://dev.local/app/wait"
+do curl "http://dev.local/movieflix/wait"
 echo
 done
 `
 
 ## Check app url
-`minikube -p dev.to service -n dev-to myapp --url`
+`minikube -p lambdasys.movieflix service -n lambdasys-movieflix movieflixapp --url`
 
 Change your IP and PORT as you need it
 
 `
-curl -X GET http://dev.local/app/users
-`
-
-Add new User
-`
-curl --location --request POST 'http://dev.local/app/users' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "name": "new user",
-    "birthDate": "2010-10-01"
-}'
+curl -X GET http://dev.local/movieflix/api/v1/movies
 `
 
 ## Part four - debug app:
@@ -282,21 +271,21 @@ add   JAVA_OPTS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,sus
 change CMD to ENTRYPOINT on Dockerfile
 
 `
-kubectl get pods -n=dev-to
+kubectl get pods -n=lambdasys-movieflix
 `
 
 `
-kubectl port-forward -n=dev-to <pod_name> 5005:5005
+kubectl port-forward -n=lambdasys-movieflix <pod_name> 5005:5005
 `
 
 ## KubeNs and Stern
 
 `
-kubens dev-to
+kubens lambdasys-movieflix
 `
 
 `
-stern myapp
+stern movieflixapp
 ` 
 
 ## Start all
