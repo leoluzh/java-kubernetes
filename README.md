@@ -153,6 +153,13 @@ kubectl logs -n lambdasys-movieflix -f <pod_name>
 kubectl port-forward -n lambdasys-movieflix <pod_name> 5432:5432
 `
 
+### Access kubernetes/cluster via ssh
+`
+minikube -p lambdasys-movieflix ssh
+docker ps
+docker images
+`
+
 ## Build application and deploy
 
 build app
@@ -241,7 +248,7 @@ kubectl -n lambdasys-movieflix scale deployment/movieflixapp --replicas=2
 Test replicas
 `
 while true
-do curl "http://dev.local/movieflix/hello"
+do curl "http://movieflix.local/movieflix/hello"
 echo
 sleep 2
 done
@@ -250,7 +257,7 @@ Test replicas with wait
 
 `
 while true
-do curl "http://dev.local/movieflix/wait"
+do curl "http://movieflix.local/movieflix/wait"
 echo
 done
 `
@@ -261,7 +268,7 @@ done
 Change your IP and PORT as you need it
 
 `
-curl -X GET http://dev.local/movieflix/api/v1/movies
+curl -X GET http://movieflix.local/movieflix/api/v1/movies
 `
 
 ## Part four - debug app:
