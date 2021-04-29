@@ -1,5 +1,7 @@
 # Java and Kubernetes
 
+Movieflix - API REST for managament of movie catalog.
+
 Show how you can move your spring boot application to docker and kubernetes.
 
 
